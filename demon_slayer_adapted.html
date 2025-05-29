@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demon Slayer Characters</title>
+    <style>
+        /* Global styles */
+        :root {
+            --primary-color: #e94822;
+            --secondary-color: #2d3142;
+            --accent-color: #f8b500;
+            --background-color: #f4f4f4;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header styles */
+        .header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tab {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 0.5rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .tab:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Main content styles */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .character-card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .character-image {
+            width: 136px;
+            height: 136px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #eee;
+            margin-bottom: 0.5rem;
+        }
+
+        .character-card h3 {
+            margin: 0.5rem 0;
+            color: var(--secondary-color);
+            font-size: 1rem;
+        }
+
+        .character-japanese {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--secondary-color);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-image-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-title {
+            flex: 1;
+        }
+
+        .modal-title h2 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-japanese {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .profile-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: var(--transition);
+        }
+
+        .profile-link:hover {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Tab content visibility */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .character-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 1rem;
+            }
+            
+            .modal-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .modal-image-container {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .tab {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .character-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>Demon Slayer Characters</h1>
+            <div class="tabs">
+                <button class="tab active" onclick="changeTab('hashiras')">Hashiras</button>
+                <button class="tab" onclick="changeTab('demon-slayers')">Demon Slayers</button>
+                <button class="tab" onclick="changeTab('demons')">Demons</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Hashiras Tab Content -->
+            <div id="hashiras-content" class="tab-content active">
+                <div class="character-grid">
+                    <!-- Giyuu Tomioka -->
+                    <div class="character-card" onclick="showModal('giyuu')">
+                        <img src="images/giyuu.jpg" alt="Giyuu Tomioka" class="character-image">
+                        <h3>Giyuu Tomioka</h3>
+                        <p class="character-japanese">冨岡 義勇</p>
+                    </div>
+                    
+                    <!-- Mitsuri Kanroji -->
+                    <div class="character-card" onclick="showModal('mitsuri')">
+                        <img src="images/mitsuri.jpg" alt="Mitsuri Kanroji" class="character-image">
+                        <h3>Mitsuri Kanroji</h3>
+                        <p class="character-japanese">甘露寺 蜜璃</p>
+                    </div>
+                    
+                    <!-- Shinobu Kocho -->
+                    <div class="character-card" onclick="showModal('shinobu')">
+                        <img src="images/shinobu.jpg" alt="Shinobu Kocho" class="character-image">
+                        <h3>Shinobu Kocho</h3>
+                        <p class="character-japanese">胡蝶 しのぶ</p>
+                    </div>
+                    
+                    <!-- Muichiro Tokito -->
+                    <div class="character-card" onclick="showModal('muichiro')">
+                        <img src="images/muichiro.jpg" alt="Muichiro Tokito" class="character-image">
+                        <h3>Muichiro Tokito</h3>
+                        <p class="character-japanese">時透 無一郎</p>
+                    </div>
+                    
+                    <!-- Tengen Uzui -->
+                    <div class="character-card" onclick="showModal('tengen')">
+                        <img src="images/tengen.jpg" alt="Tengen Uzui" class="character-image">
+                        <h3>Tengen Uzui</h3>
+                        <p class="character-japanese">宇髄 天元</p>
+                    </div>
+                    
+                    <!-- Gyomei Himejima -->
+                    <div class="character-card" onclick="showModal('gyomei')">
+                        <img src="images/gyomei.jpg" alt="Gyomei Himejima" class="character-image">
+                        <h3>Gyomei Himejima</h3>
+                        <p class="character-japanese">悲鳴嶼 行冥</p>
+                    </div>
+                    
+                    <!-- Sanemi Shinazugawa -->
+                    <div class="character-card" onclick="showModal('sanemi')">
+                        <img src="images/sanemi.jpg" alt="Sanemi Shinazugawa" class="character-image">
+                        <h3>Sanemi Shinazugawa</h3>
+                        <p class="character-japanese">不死川 実弥</p>
+                    </div>
+                    
+                    <!-- Kyojuro Rengoku -->
+                    <div class="character-card" onclick="showModal('rengoku')">
+                        <img src="images/rengoku.jpg" alt="Kyojuro Rengoku" class="character-image">
+                        <h3>Kyojuro Rengoku</h3>
+                        <p class="character-japanese">煉獄 杏寿郎</p>
+                    </div>
+                    
+                    <!-- Yoriichi Tsugikuni -->
+                    <div class="character-card" onclick="showModal('yoriichi')">
+                        <img src="images/yoriichi.jpg" alt="Yoriichi Tsugikuni" class="character-image">
+                        <h3>Yoriichi Tsugikuni</h3>
+                        <p class="character-japanese">継国 縁壱</p>
+                    </div>
+                    
+                    <!-- Kanae Kocho -->
+                    <div class="character-card" onclick="showModal('kanae')">
+                        <img src="images/kanae.jpg" alt="Kanae Kocho" class="character-image">
+                        <h3>Kanae Kocho</h3>
+                        <p class="character-japanese">胡蝶 カナエ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Demon Slayers Tab Content -->
+            <div id="demon-slayers-content" class="tab-content">
+                <div class="character-grid">
+                    <!-- Tanjiro Kamado -->
+                    <div class="character-card" onclick="showModal('tanjiro')">
+                        <img src="images/tanjiro.jpg" alt="Tanjiro Kamado" class="character-image">
+                        <h3>Tanjiro Kamado</h3>
+                        <p class="character-japanese">竈門 炭治郎</p>
+                    </div>
+                    
+                    <!-- Kanao Tsuyuri -->
+                    <div class="character-card" onclick="showModal('kanao')">
+                        <img src="images/kanao.jpg" alt="Kanao Tsuyuri" class="character-image">
+                        <h3>Kanao Tsuyuri</h3>
+                        <p class="character-japanese">栗花落 カナヲ</p>
+                    </div>
+                    
+                    <!-- Zenitsu Agatsuma -->
+                    <div class="character-card" onclick="showModal('zenitsu')">
+                        <img src="images/zenitsu.jpg" alt="Zenitsu Agatsuma" class="character-image">
+                        <h3>Zenitsu Agatsuma</h3>
+                        <p class="character-japanese">我妻 善逸</p>
+                    </div>
+                    
+                    <!-- Inosuke Hashibira -->
+                    <div class="character-card" onclick="showModal('inosuke')">
+                        <img src="images/inosuke.jpg" alt="Inosuke Hashibira" class="character-image">
+                        <h3>Inosuke Hashibira</h3>
+                        <p class="character-japanese">嘴平 伊之助</p>
+                    </div>
+                    
+                    <!-- Genya Shinazugawa -->
+                    <div class="character-card" onclick="showModal('genya')">
+                        <img src="images/genya.jpg" alt="Genya Shinazugawa" class="character-image">
+                        <h3>Genya Shinazugawa</h3>
+                        <p class="character-japanese">不死川 玄弥</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Demons Tab Content -->
+            <div id="demons-content" class="tab-content">
+                <div class="character-grid">
+                    <!-- Muzan Kibutsuji -->
+                    <div class="character-card" onclick="showModal('muzan')">
+                        <img src="images/muzan.jpg" alt="Muzan Kibutsuji" class="character-image">
+                        <h3>Muzan Kibutsuji</h3>
+                        <p class="character-japanese">鬼舞辻 無惨</p>
+                    </div>
+                    
+                    <!-- Nezuko Kamado -->
+                    <div class="character-card" onclick="showModal('nezuko')">
+                        <img src="images/nezuko.jpg" alt="Nezuko Kamado" class="character-image">
+                        <h3>Nezuko Kamado</h3>
+                        <p class="character-japanese">竈門 禰豆子</p>
+                    </div>
+                    
+                    <!-- Kokushibo -->
+                    <div class="character-card" onclick="showModal('kokushibo')">
+                        <img src="images/kokushibo.jpg" alt="Kokushibo" class="character-image">
+                        <h3>Kokushibo</h3>
+                        <p class="character-japanese">黒死牟</p>
+                    </div>
+                    
+                    <!-- Doma -->
+                    <div class="character-card" onclick="showModal('doma')">
+                        <img src="images/doma.jpg" alt="Doma" class="character-image">
+                        <h3>Doma</h3>
+                        <p class="character-japanese">童磨</p>
+                    </div>
+                    
+                    <!-- Akaza -->
+                    <div class="character-card" onclick="showModal('akaza')">
+                        <img src="images/akaza.jpg" alt="Akaza" class="character-image">
+                        <h3>Akaza</h3>
+                        <p class="character-japanese">猗窩座</p>
+                    </div>
+                    
+                    <!-- Nakime -->
+                    <div class="character-card" onclick="showModal('nakime')">
+                        <img src="images/nakime.jpg" alt="Nakime" class="character-image">
+                        <h3>Nakime</h3>
+                        <p class="character-japanese">鳴女</p>
+                    </div>
+                    
+                    <!-- Hantengu -->
+                    <div class="character-card" onclick="showModal('hantengu')">
+                        <img src="images/hantengu.jpg" alt="Hantengu" class="character-image">
+                        <h3>Hantengu</h3>
+                        <p class="character-japanese">半天狗</p>
+                    </div>
+                    
+                    <!-- Gyokko -->
+                    <div class="character-card" onclick="showModal('gyokko')">
+                        <img src="images/gyokko.jpg" alt="Gyokko" class="character-image">
+                        <h3>Gyokko</h3>
+                        <p class="character-japanese">玉壺</p>
+                    </div>
+                    
+                    <!-- Gyutaro -->
+                    <div class="character-card" onclick="showModal('gyutaro')">
+                        <img src="images/gyutaro.jpg" alt="Gyutaro" class="character-image">
+                        <h3>Gyutaro</h3>
+                        <p class="character-japanese">妓夫太郎</p>
+                    </div>
+                    
+                    <!-- Daki -->
+                    <div class="character-card" onclick="showModal('daki')">
+                        <img src="images/daki.jpg" alt="Daki" class="character-image">
+                        <h3>Daki</h3>
+                        <p class="character-japanese">堕姫</p>
+                    </div>
+                    
+                    <!-- Kaigaku -->
+                    <div class="character-card" onclick="showModal('kaigaku')">
+                        <img src="images/kaigaku.jpg" alt="Kaigaku" class="character-image">
+                        <h3>Kaigaku</h3>
+                        <p class="character-japanese">獪岳</p>
+                    </div>
+                    
+                    <!-- Tamayo -->
+                    <div class="character-card" onclick="showModal('tamayo')">
+                        <img src="images/tamayo.jpg" alt="Tamayo" class="character-image">
+                        <h3>Tamayo</h3>
+                        <p class="character-japanese">珠世</p>
+                    </div>
+                    
+                    <!-- Yushiro -->
+                    <div class="character-card" onclick="showModal('yushiro')">
+                        <img src="images/yushiro.jpg" alt="Yushiro" class="character-image">
+                        <h3>Yushiro</h3>
+                        <p class="character-japanese">愈史郎</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Character Modals -->
+        <!-- Hashira Modals -->
+        <div id="giyuu-modal" class="modal-overlay">
+            <div class="modal-content">
+                <button class="close-button" onclick="closeModal('giyuu')">×</button>
+                <div class="modal-header">
+                    <div class="modal-image-container">
+                        <img src="images/giyuu.jpg" alt="Giyuu Tomioka" class="modal-image">
+                    </div>
+                    <div class="modal-title">
+                        <h2>Giyuu Tomioka</h2>
+                        <p class="modal-japanese">冨岡 義勇</p>
+                        <a href="giyuu_profile.html" class="profile-link">View Full Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mitsuri-modal" class="modal-overlay">
+            <div class="modal-content">
+                <button class="close-button" onclick="closeModal('mitsuri')">×</button>
+                <div class="modal-header">
+                    <div class="modal-image-container">
+                        <img src="images/mitsuri.jpg" alt="Mitsuri Kanroji" class="modal-image">
+                    </div>
+                    <div class="modal-title">
+                        <h2>Mitsuri Kanroji</h2>
+                        <p class="modal-japanese">甘露寺 蜜璃</p>
+                        <a href="mitsuri_profile.html" class="profile-link">View Full Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- More modals for all characters would go here -->
+        <!-- For brevity, I'm only including a few examples -->
+
+        <footer class="footer">
+            <p>Demon Slayer (Kimetsu no Yaiba) Character Showcase</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function changeTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Deactivate all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activate selected tab and content
+            document.getElementById(tabName + '-content').classList.add('active');
+            document.querySelector(`.tab[onclick="changeTab('${tabName}')"]`).classList.add('active');
+        }
+        
+        // Modal functionality
+        function showModal(characterId) {
+            document.getElementById(characterId + '-modal').classList.add('active');
+        }
+        
+        function closeModal(characterId) {
+            document.getElementById(characterId + '-modal').classList.remove('active');
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
